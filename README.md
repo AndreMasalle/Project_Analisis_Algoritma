@@ -87,6 +87,7 @@ Maka untuk solusi rekursif terdalam adalah:
 $$ T_{baris}(W) = \frac{W}{2} $$
 
 Kemudian untuk rekursif tengah untuk flip channel didapatkan $T(n)$:
+
 $$
 T_{channel}(H,W) =
 \begin{cases}
