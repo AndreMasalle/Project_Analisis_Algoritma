@@ -145,7 +145,7 @@ $$
 
 ## Kesimpulan
 Meskipun algoritma iteratif dan rekursif memiliki kompleksitas waktu yang sama
-(Θ(H·W)), perbedaan runtime nyata muncul akibat overhead Python ataupun manajemen memori ataupun hal yang lainnya.
+(O(H·W)), perbedaan runtime nyata muncul akibat overhead Python ataupun manajemen memori ataupun hal yang lainnya.
 
 
   
