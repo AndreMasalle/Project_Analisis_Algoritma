@@ -1,41 +1,151 @@
-# Social Network Influence Mapper
+# Horizontal Image Flip
 
 ## Deskripsi Tugas
-Tugas besar ini bertujuan untuk membandingkan efisiensi dua algoritma dalam menganalisis jaringan sosial. Mahasiswa diharapkan memahami pentingnya algoritma yang efisien melalui praktik langsung dan visualisasi hasil analisis.
+Tugas besar ini bertujuan untuk membandingkan efisiensi dua algoritma (Iteratif vs Rekursif) dalam Horizontal Image Flipping. Mahasiswa diharapkan memahami pentingnya algoritma yang efisien melalui praktik langsung dan visualisasi hasil analisis.
 
 ## Judul
-**Analisis Kompleksitas Algoritma Graph Analysis: Perbandingan PageRank Iteratif dan Community Detection Recursive untuk Pemetaan Pengaruh dalam Jejaring Sosial**
+**Analisis Performa Pendekatan Rekursif vs Iteratif pada Horizontal Image Flipping**
 
 ## Anggota Kelompok
-- Krisnia Syawahdani
-- IGN Brindawan Tri Guna Yoga
-- Andre Masalle
-
-## Studi Kasus
-Analisis pengaruh pengguna dan komunitas dalam jejaring sosial, seperti Facebook, Twitter, atau email, untuk memahami pola interaksi dan hubungan pengaruh di antara anggota jaringan.
-
-## Dataset
-- **Sumber:** [Stanford SNAP Twitter Networks](https://snap.stanford.edu/data/twitter_combined.txt.gz)  
-- **Deskripsi:** Dataset ini merupakan gabungan 973 ego-networks Twitter, membentuk graph directed dengan node mewakili akun pengguna dan edge mewakili hubungan "follow".  
-- **Ukuran:** 81.306 nodes, 1.768.149 edges.  
-- **Catatan:** Dataset hanya berisi Node ID dan edges; tidak ada nama atau fitur pribadi pengguna. Dataset cocok untuk analisis struktur graph, PageRank, dan deteksi komunitas.
+<table>
+  <tr>
+    <th> NIM </th>
+    <th> Nama </th>
+    <th> Bagian yang dikerjakan </th>    
+  </tr>
+  <tr>
+    <td> 103012580012 </td>
+    <td> Krisnia Syahwadani </td>
+    <td> Iteratif </td>
+  </tr>
+  <tr>
+    <td> 103012580016 </td>
+    <td> IGN Brindawan Tri Guna Yoga </td>
+    <td> Rekursif </td>
+  </tr>
+  <tr>
+    <td> 103012580019 </td>
+    <td> Andre Fransiscus Masalle </td>
+    <td> Ide dan Analisis </td>
+  </tr>
+</table>
 
 ## Algoritma yang Digunakan
-- **Iteratif:** PageRank Algorithm  
-  Mengukur tingkat pengaruh tiap node dalam jaringan melalui pendekatan iteratif.
+- **Iteratif:** Iterasi per piksel (nested loop pada setiap baris dan channel)
 
-- **Rekursif:** Louvain Community Detection  
-  Mengidentifikasi komunitas dalam jaringan menggunakan metode rekursif berbasis modularitas.
+- **Rekursif:** Rekursi dengan pendekatan divide-and-conquer sederhana
 
-## Aplikasi Sederhana
-Visualisasi interaktif struktur jaringan yang menampilkan node, edge, pengaruh tiap pengguna, dan komunitas yang terbentuk.  
-*(Contoh: visualisasi network graph dengan node berwarna sesuai komunitas, ukuran node berdasarkan PageRank)*
+## Eksperimen
+Eksperimen dilakukan menggunakan beberapa citra dengan ukuran berbeda.
+Runtime diukur dan divisualisasikan dalam grafik runtime vs ukuran data (jumlah piksel).
 
-## Analisis Efisiensi
-- Mengukur running time kedua algoritma dengan berbagai ukuran masukan (misal: 1, 10, 20, ..., 10000 node).  
-- Membandingkan kelas kompleksitas waktu (asymptotic complexity) dari algoritma iteratif dan rekursif.  
-- Menyajikan grafik perbandingan efisiensi.
+
+## Analisis Komplesitas Iteratif
+
+
+Pada inner loop iteratif dapat dihitung komplesitasnya sebagai berikut:
+
+$$
+T_{inner}(H,W) = \sum_{i=1}^{H} \sum_{j=1}^{W/2} 1 = \frac{H \cdot W}{2}
+$$
+
+Dikarenakan horizontal maka yang swap adalah kiri dan kanan sehingga yang dibagi 2 adalah width nya, kemudian hal yang sama dilakukan pada 3 channel RGB, sehingga didapatkan kompleksitas seperti berikut:
+
+
+$$
+T_{iteratif}(H,W) = \sum_{i=1}^{3} \sum_{j=1}^{H} \sum_{k=1}^{W/2} 1 = \frac{3 \cdot H \cdot W}{2} = \frac{3}{2}n
+$$
+
+Maka:
+
+$$
+ T_{iteratif}(H,W) \in O(HW)
+$$
+
+atau dengan $n=HW$
+
+$$
+ T_{iteratif}(n) \in O(n)
+$$
+
+## Analisis Komplesitas Rekursif
+
+Pertama-tama untuk rekursif terdalam yang menukar baris Didapati $T(n)$ sebagai berikut:
+
+$$
+T_{baris}(W) =
+\begin{cases}
+0 & \text{jika } kiri ≥ kanan \\
+1 + T(W-2) & \text{lainnya}
+\end{cases}
+$$
+
+- $W = \text{jumlah kolom}$
+
+Maka untuk solusi rekursif terdalam adalah:
+
+$$ T_{baris}(W) = \frac{W}{2} $$
+
+Kemudian untuk rekursif tengah untuk flip channel didapatkan $T(n)$:
+$$
+T_{channel}(H,W) =
+\begin{cases}
+0 &  H=0 \\
+T_{baris}(W) + T(H-1, W) & H>0
+\end{cases}
+$$
+
+- $H = \text{jumlah baris}$
+- $W = \text{jumlah kolom}$
+
+Maka untuk solusi rekursif bagian tengah ini adalah:
+
+$$
+T_{channel}(H,W) = \frac{H \cdot W}{2}
+$$
+
+Lalu yang terakhir, rekursif pada 3 channel didapati T(n) sebagai berikut:
+
+$$
+T_{rgb}(H,W) =
+\begin{cases}
+0 &  c=0 \\
+T_{channel}(H,W) + T_{rgb}(H, W, c-1) & c>0
+\end{cases}
+$$
+
+- $H = \text{jumlah baris}$
+- $W = \text{jumlah kolom}$
+- $c = \text{3 channel (R,G,B)}$
+
+
+Maka untuk solusi rekursif bagian tengah ini adalah:
+
+$$
+T_{rgb}(H,W) = \frac{3 \cdot H \cdot W}{2} = \frac{3}{2}HW
+$$
+
+Sehingga
+
+$$
+T_{rekursif}(H,W) \in O(HW)
+$$
+
+Jika $n = HW$, maka:
+
+$$
+T_{rekursif}(n) \in O(n)
+$$
+
+
 
 ## Grafik Perbandingan Running Time
-*(Grafik akan ditambahkan sini setelah pengujian)*
+
+<img width="841" height="393" alt="image" src="https://github.com/user-attachments/assets/41b831a8-e835-408f-95ff-b624b934f812" />
+
+## Kesimpulan
+Meskipun algoritma iteratif dan rekursif memiliki kompleksitas waktu yang sama
+(Θ(H·W)), perbedaan runtime nyata muncul akibat overhead Python ataupun manajemen memori ataupun hal yang lainnya.
+
+
   
