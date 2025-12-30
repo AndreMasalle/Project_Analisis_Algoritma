@@ -123,7 +123,7 @@ $$
 Maka untuk solusi rekursif bagian tengah ini adalah:
 
 $$
-T_{rgb}(H,W) = \frac{3 \cdot H \cdot W}{2} = \frac{3}{2}HW
+T_{rekursif}(H,W) = \frac{3 \cdot H \cdot W}{2} = \frac{3}{2}HW
 $$
 
 Sehingga
