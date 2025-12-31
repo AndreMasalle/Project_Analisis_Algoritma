@@ -120,7 +120,7 @@ $$
 - $c = \text{3 channel (R,G,B)}$
 
 
-Maka untuk solusi rekursif bagian tengah ini adalah:
+Maka untuk solusi rekursif bagian akhir ini adalah:
 
 $$
 T_{rekursif}(H,W) = \frac{3 \cdot H \cdot W}{2} = \frac{3}{2}HW
